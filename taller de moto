@@ -1,0 +1,125 @@
+Estructura de tabla para la tabla `clientes`
+--
+
+CREATE TABLE `clientes` (
+  `IdCliente` int(11) NOT NULL,
+  `Nombre` varchar(100) NOT NULL,
+  `Telefono` varchar(15) DEFAULT NULL,
+  `Email` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `clientes`
+--
+
+INSERT INTO `clientes` (`IdCliente`, `Nombre`, `Telefono`, `Email`) VALUES
+(1, 'Juan Pérez', '123456789', 'juan.perez@mail.com'),
+(2, 'María López', '987654321', 'maria.lopez@mail.com');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `motos`
+--
+
+CREATE TABLE `motos` (
+  `IdMoto` int(11) NOT NULL,
+  `Marca` varchar(50) NOT NULL,
+  `Modelo` varchar(50) NOT NULL,
+  `Patente` varchar(10) NOT NULL,
+  `IdCliente` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `motos`
+--
+
+INSERT INTO `motos` (`IdMoto`, `Marca`, `Modelo`, `Patente`, `IdCliente`) VALUES
+(1, 'Honda', 'CBR 500R', 'ABC123', 1),
+(2, 'Yamaha', 'YZF-R3', 'XYZ789', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `servicios`
+--
+
+CREATE TABLE `servicios` (
+  `IdServicio` int(11) NOT NULL,
+  `FechaServicio` date NOT NULL,
+  `Descripcion` varchar(255) NOT NULL,
+  `Costo` decimal(10,2) NOT NULL,
+  `IdMoto` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `servicios`
+--
+
+INSERT INTO `servicios` (`IdServicio`, `FechaServicio`, `Descripcion`, `Costo`, `IdMoto`) VALUES
+(1, '2024-11-01', 'Cambio de aceite y filtro', 150000.00, 1),
+(2, '2024-11-15', 'Revisión general', 250000.00, 2);
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `clientes`
+--
+ALTER TABLE `clientes`
+  ADD PRIMARY KEY (`IdCliente`);
+
+--
+-- Indices de la tabla `motos`
+--
+ALTER TABLE `motos`
+  ADD PRIMARY KEY (`IdMoto`),
+  ADD UNIQUE KEY `Patente` (`Patente`),
+  ADD KEY `IdCliente` (`IdCliente`);
+
+--
+-- Indices de la tabla `servicios`
+--
+ALTER TABLE `servicios`
+  ADD PRIMARY KEY (`IdServicio`),
+  ADD KEY `IdMoto` (`IdMoto`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `clientes`
+--
+ALTER TABLE `clientes`
+  MODIFY `IdCliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `motos`
+--
+ALTER TABLE `motos`
+  MODIFY `IdMoto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `servicios`
+--
+ALTER TABLE `servicios`
+  MODIFY `IdServicio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `motos`
+--
+ALTER TABLE `motos`
+  ADD CONSTRAINT `motos_ibfk_1` FOREIGN KEY (`IdCliente`) REFERENCES `clientes` (`IdCliente`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `servicios`
+--
+ALTER TABLE `servicios`
+  ADD CONSTRAINT `servicios_ibfk_1` FOREIGN KEY (`IdMoto`) REFERENCES `motos` (`IdMoto`) ON DELETE CASCADE;
+COMMIT;
